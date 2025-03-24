@@ -5,3 +5,4 @@
 /MinimalApis/bin/Debug/net8.0
 /MinimalApis/obj
 *.sln
+/.vs
