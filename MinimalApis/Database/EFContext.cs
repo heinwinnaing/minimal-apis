@@ -8,6 +8,7 @@ namespace MinimalApis.Database;
 public class EFContext
     : DbContext, IDbContext
 {
+    public EFContext() { }
     public EFContext(DbContextOptions<EFContext> options)
         : base(options)
     { }
