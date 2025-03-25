@@ -6,3 +6,5 @@
 /MinimalApis/obj
 *.sln
 /.vs
+/MinimalApis.Test/bin/Debug/net8.0
+/MinimalApis.Test/obj
