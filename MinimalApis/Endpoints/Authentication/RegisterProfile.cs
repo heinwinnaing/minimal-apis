@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MinimalApis.Commands.RegisterProfile;
+using MinimalApis.Filters;
 using MinimalApis.Model;
 
 namespace MinimalApis.Endpoints.Authentication;
@@ -12,6 +13,7 @@ public class RegisterProfile
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("auth/register", async (
+            [FromHeader(Name = "Idempotency-Key")] string idempotencyKey,
             [FromBody]RegisterProfileCommand command,
             CancellationToken cancellationToken,
             IMediator mediator) => 
@@ -25,6 +27,7 @@ public class RegisterProfile
             .WithTags("Authentication")
             .WithSummary("[Register profile]")
             .HasApiVersion(1)
+            .AddEndpointFilter<IdempotencyFilter>()
             .Accepts<RegisterProfileCommand>("application/json")
             .Produces<ResultModel<RegisterProfileCommandDto>>(200);
     }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MinimalApis.Commands.RequestOtp;
+using MinimalApis.Filters;
 using MinimalApis.Model;
 
 namespace MinimalApis.Endpoints.Authentication;
@@ -25,6 +26,7 @@ public class RequestOtp
             .WithTags("Authentication")
             .WithSummary("[request otp]")
             .HasApiVersion(1)
+            .AddEndpointFilter<IdempotencyFilter>()
             .Accepts(typeof(RequestOtpCommand), "application/json")
             .Produces(200, typeof(ResultModel<RequestOtpCommandDto>));
     }

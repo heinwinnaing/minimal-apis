@@ -5,12 +5,14 @@ using Microsoft.OpenApi.Models;
 using MinimalApis.Database;
 using MinimalApis.Domain;
 using MinimalApis.Extensions;
+using MinimalApis.Filters;
 using MinimalApis.Model;
 using MinimalApis.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMemoryCache();
 builder.Services.AddDbContext<EFContext>(options => 
 {
     options.UseInMemoryDatabase("db_inmemory");
@@ -66,6 +68,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.RegisterEndpoints();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<IdempotencyFilter>();
 
 #region #swagger-ui
 builder.Services.AddSwaggerGen(c =>
@@ -100,6 +103,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseMiddleware<IdempotencyMiddleware>();
 
 //map minimal endpoints
 app.MapEndpoints();
