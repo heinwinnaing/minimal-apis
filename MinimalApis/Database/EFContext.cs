@@ -13,7 +13,7 @@ public class EFContext
         : base(options)
     { }
     public virtual DbSet<Account> Accounts { get; set; }
-
+    public virtual DbSet<TwoFactor> TwoFactors { get; set; }
     public override int SaveChanges()
     {
         return base.SaveChanges();
@@ -32,6 +32,13 @@ public class EFContext
             entity.HasIndex(i => i.Phone, "idx_accounts_phone");
             entity.Property(p => p.Id)
                 .ValueGeneratedOnAdd();
+        });
+        modelBuilder.Entity<TwoFactor>(entity => 
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            entity.HasIndex(i => i.SecretKey, "idx_secret_key").IsUnique();
         });
         base.OnModelCreating(modelBuilder);
     }

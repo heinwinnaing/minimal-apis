@@ -69,6 +69,8 @@ builder.Services.RegisterEndpoints();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<IdempotencyFilter>();
+builder.Services.AddScoped<IEmailService, EmailProcessor>();
+builder.Services.AddScoped<ITwoFactorService, TwoFactorService>();
 
 #region #swagger-ui
 builder.Services.AddSwaggerGen(c =>
