@@ -9,6 +9,8 @@ using MinimalApis.Filters;
 using MinimalApis.Model;
 using MinimalApis.Services;
 using System.Text;
+using System.Net;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,20 @@ builder.Services.AddApiVersioning(options =>
 {
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
+});
+#endregion
+
+#region #rate-limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddSlidingWindowLimiter(policyName: "SlidingWindowLimiter", cfg =>
+    {
+        cfg.PermitLimit = 100;
+        cfg.Window = TimeSpan.FromMinutes(1);
+        cfg.SegmentsPerWindow = 6;
+        cfg.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = (int)HttpStatusCode.TooManyRequests;
 });
 #endregion
 
@@ -104,6 +120,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseRateLimiter();
 app.UseResponseCompression();
 app.UseSwagger();
 app.UseSwaggerUI();
