@@ -36,6 +36,11 @@ builder.Services.AddApiVersioning(options =>
 });
 #endregion
 
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
+
 #region #authentications
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -99,6 +104,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseResponseCompression();
 app.UseSwagger();
 app.UseSwaggerUI();
 
