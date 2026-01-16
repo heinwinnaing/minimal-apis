@@ -1,4 +1,4 @@
-name: "Check .NET Vulnerable Packages"
+name: ".NET Dependency Review and Vulnerable Packages"
 
 #on: pull_request
 on:
