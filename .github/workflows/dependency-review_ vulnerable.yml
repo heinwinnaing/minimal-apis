@@ -1,0 +1,39 @@
+name: "Check .NET Vulnerable Packages"
+
+#on: pull_request
+on:
+  workflow_dispatch:
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Dependency Review"
+        uses: actions/dependency-review-action@v4
+        with:
+          # Optional: Configure the action to your needs
+          fail-on-severity: 'critical' # Fails on critical vulnerabilities or higher
+          
+  vulnerable-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v4
+
+      - name: "Setup .NET"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x' # Specify your .NET version
+          cache: false
+
+      - name: "Restore Dependencies"
+        run: dotnet restore
+
+      - name: "Check for Vulnerable Packages"
+        uses: actions/net-vulnerable@v2
+        with:
+          add-pr-comment: true # optional: configure to your needs
+          fail-on-vulnerable: true
