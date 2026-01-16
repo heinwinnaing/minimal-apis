@@ -26,3 +26,6 @@ jobs:
 
       - name: Build the project
         run: dotnet build ${{ env.PROJECT_PATH }} --no-restore
+
+      - name: Test the project
+        run: dotnet test --no-build
