@@ -29,6 +29,7 @@ public class RegisterProfile
             .HasApiVersion(1)
             .AddEndpointFilter<IdempotencyFilter>()
             .Accepts<RegisterProfileCommand>("application/json")
-            .Produces<ResultModel<RegisterProfileCommandDto>>(200);
+            .Produces<ResultModel<RegisterProfileCommandDto>>(200)
+            .RequireRateLimiting("SlidingWindowLimiter");
     }
 }
