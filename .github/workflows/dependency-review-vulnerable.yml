@@ -25,23 +25,23 @@ jobs:
           fail-on-severity: 'critical' # Possible values: "critical", "high", "moderate", "low"
           fail-on-scopes: development, runtime # Possible values: "development", "runtime", "unknown"
           
-  # vulnerable-packages:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "Checkout Repository"
-  #       uses: actions/checkout@v4
+  vulnerable-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v5
 
-  #     - name: "Setup .NET"
-  #       uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: '8.x' # Specify your .NET version
-  #         cache: false
+      - name: "Setup .NET"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x' # Specify your .NET version
+          cache: false
 
-  #     - name: "Restore Dependencies"
-  #       run: dotnet restore
+      - name: "Restore Dependencies"
+        run: dotnet restore
 
-  #     - name: "Check for Vulnerable Packages"
-  #       uses: actions/net-vulnerable@v2
-  #       with:
-  #         add-pr-comment: true # optional: configure to your needs
-  #         fail-on-vulnerable: true
+      - name: "Check for Vulnerable Packages"
+        uses: actions/net-vulnerable@v2
+        with:
+          add-pr-comment: true # optional: configure to your needs
+          fail-on-vulnerable: true
