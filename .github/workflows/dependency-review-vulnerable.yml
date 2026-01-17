@@ -15,7 +15,7 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           # Optional: Configure the action to your needs
-          allow-licenses: "MIT, Apache-2.0, BSD"
+          allow-licenses: "MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause"
           deny-licenses: "GPL-1.0, AGPL-3.0"
           # Optional: Allows configuring which licenses are considered to be acceptable.
           # allow-licenses: "MIT, Apache-2.0" 
