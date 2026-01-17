@@ -44,8 +44,18 @@ jobs:
       - name: "Restore Dependencies"
         run: dotnet restore ${{ env.PROJECT_PATH }}
 
-      - name: "Check for Vulnerable Packages"
-        uses: actions/net-vulnerable@v2
+      - name: "Check for .NET Vulnerable Packages"
+        uses: gavanlamb/.net-vulnerable@latest
         with:
-          add-pr-comment: true # optional: configure to your needs
-          fail-on-vulnerable: true
+          add-pr-comment: true
+          add-check-run: true
+          frameworks: net8.0
+          pr-comment-name: net8.0
+          target: ${{ env.PROJECT_PATH }}
+
+      #- name: "Check for Vulnerable Packages"
+        #uses: gavanlamb/.net-vulnerable@latest
+        #uses: actions/net-vulnerable@v2
+        # with:
+        #   add-pr-comment: true # optional: configure to your needs
+        #   fail-on-vulnerable: true
