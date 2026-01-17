@@ -18,11 +18,25 @@ jobs:
       - name: "Setup .NET"
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x' # Specify your .NET version
+          dotnet-version: '8.x'
           cache: false
 
       - name: "Scan for deprecated packages"
-        run: dotnet list ${{ env.PROJECT_PATH }} package --deprecated || exit 1
+        # run: dotnet list ${{ env.PROJECT_PATH }} package --deprecated || exit 1
+        shell: bash
+        run: |
+          # Capture output and check for the presence of deprecated package headers
+          OUTPUT=$(dotnet list ${{ env.PROJECT_PATH }} package --deprecated)
+          echo "$OUTPUT"
+          
+          if echo "$OUTPUT" | grep -q 'has the following deprecated packages'; then
+            echo "Error: Deprecated packages detected."
+            exit 1
+          else
+            echo "No deprecated packages found."
+            exit 0
+          fi
+
         
-      # - name: "Scan for vulnerable NuGet packages"
-      #   run: dotnet list package --vulnerable --include-transitive || exit 0 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
+      - name: "Scan for vulnerable packages"
+        run: dotnet list ${{ env.PROJECT_PATH }} package --vulnerable --include-transitive || exit 1
