@@ -31,9 +31,8 @@ jobs:
       - name: Build the project
         run: |
           dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
-          echo: "Successfully build the project"
           dotnet build ${{ env.TEST_PROJECT_PATH }} --no-restore --configuration Release
-          echo: "Successfully build the test project"
+          echo "Successfully build the projects"
 
       - name: Run unit tests
         run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --configuration Release --verbosity normal
