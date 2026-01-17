@@ -2,6 +2,7 @@ name: Dotnet CI
 
 env:
   PROJECT_PATH: 'MinimalApis/MinimalApis.csproj'
+  TEST_PROJECT_PATH: 'MinimalApis.Test/MinimalApis.Test.csproj'
 
 on:
   pull_request:
@@ -28,4 +29,4 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }} --no-restore
 
       - name: Test the project
-        run: dotnet test --no-build
+        run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build
