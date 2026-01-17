@@ -1,4 +1,4 @@
-name: "Check Vulnerable Packages"
+name: ".NET Dependency Review and Vulnerable Packages"
 
 env:
   PROJECT_PATH: 'MinimalApis/MinimalApis.csproj'
@@ -8,7 +8,27 @@ env:
 on:
   workflow_dispatch:
 
-jobs:         
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v5
+
+      - name: "Dependency Review"
+        uses: actions/dependency-review-action@v4
+        with:
+          base-ref: 'main' # Or another branch name
+          head-ref: 'unit-test' # Or a specific commit SHA
+          # Optional: Configure the action to your needs
+          allow-licenses: MIT, Apache-2.0, BSD-3-Clause
+          # deny-licenses: GPL-1.0, AGPL-3.0
+          fail-on-severity: 'critical' # Possible values: "critical", "high", "moderate", "low"
+          fail-on-scopes: development, runtime # Possible values: "development", "runtime", "unknown"
+          
   vulnerable-packages:
     runs-on: ubuntu-latest
     steps:
@@ -21,6 +41,14 @@ jobs:
           dotnet-version: '8.x' # Specify your .NET version
           cache: false
 
-      - name: "Scan for vulnerable NuGet packages"
-        run: dotnet list package --deprecated || exit 1 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
+      - name: Scan for vulnerable NuGet packages
+        run: dotnet list package ${{ env.PROJECT_PATH }} --deprecated || exit 1 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
         #run: dotnet list package --vulnerable --include-transitive || exit 0 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
+
+
+      #- name: "Check for Vulnerable Packages"
+        #uses: gavanlamb/.net-vulnerable@latest
+        #uses: actions/net-vulnerable@v2
+        # with:
+        #   add-pr-comment: true # optional: configure to your needs
+        #   fail-on-vulnerable: true
