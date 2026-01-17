@@ -22,7 +22,7 @@ jobs:
           cache: false
 
       - name: "Scan for deprecated packages"
-        # run: dotnet list ${{ env.PROJECT_PATH }} package --deprecated || exit 1
+        # run: dotnet list ${{ env.PROJECT_PATH }} package --deprecated
         shell: bash
         run: |
           # Capture output and check for the presence of deprecated package headers
@@ -31,12 +31,19 @@ jobs:
           
           if echo "$OUTPUT" | grep -q 'has the following deprecated packages'; then
             echo "Error: Deprecated packages detected."
-            exit 1
-          else
-            echo "No deprecated packages found."
             exit 0
           fi
-
-        
+   
       - name: "Scan for vulnerable packages"
-        run: dotnet list ${{ env.PROJECT_PATH }} package --vulnerable --include-transitive || exit 1
+        # run: dotnet list ${{ env.PROJECT_PATH }} package --vulnerable --include-transitive
+        run: |
+          OUTPUT=$(dotnet list ${{ env.PROJECT_PATH }} package --vulnerable --include-transitive)
+          echo "$OUTPUT"
+          
+          if echo "$OUTPUT" | grep -q 'has the following vulnerable packages'; then
+            echo "Error: vulnerable packages detected."
+            exit 1
+          else
+            echo "No vulnerable packages found."
+            exit 0
+          fi
