@@ -1,5 +1,9 @@
 name: ".NET Dependency Review and Vulnerable Packages"
 
+env:
+  PROJECT_PATH: 'MinimalApis/MinimalApis.csproj'
+  TEST_PROJECT_PATH: 'MinimalApis.Test/MinimalApis.Test.csproj'
+
 #on: pull_request
 on:
   workflow_dispatch:
@@ -38,7 +42,7 @@ jobs:
           cache: false
 
       - name: "Restore Dependencies"
-        run: dotnet restore
+        run: dotnet restore ${{ env.PROJECT_PATH }}
 
       - name: "Check for Vulnerable Packages"
         uses: actions/net-vulnerable@v2
