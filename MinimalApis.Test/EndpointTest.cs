@@ -35,6 +35,7 @@ public class EndpointTest
         //arrange
         await using var app = new WebApplicationFactory<RegisterProfile>();
         using var httpClient = app.CreateClient();
+        httpClient.DefaultRequestHeaders.Add("Idempotency-Key", $"{Guid.NewGuid()}");
 
         //action
         var result = await httpClient.PostAsJsonAsync("/v1/auth/register", payload);
@@ -52,6 +53,7 @@ public class EndpointTest
         //arrange
         await using var app = new WebApplicationFactory<RequestOtp>();
         using var httpClient = app.CreateClient();
+        httpClient.DefaultRequestHeaders.Add("Idempotency-Key", $"{Guid.NewGuid()}");
 
         //act
         var result = await httpClient.PostAsJsonAsync("/v1/auth/request-otp", payload);
@@ -69,6 +71,8 @@ public class EndpointTest
         var response = ResultModel.Success();
         await using var app = new WebApplicationFactory<VerifyOtp>();
         using HttpClient httpClient = app.CreateClient();
+        httpClient.DefaultRequestHeaders.Add("Idempotency-Key", $"{Guid.NewGuid()}");
+        
         HttpContent httpContent = new StringContent(
             content: System.Text.Json.JsonSerializer.Serialize(payload), 
             encoding: Encoding.UTF8, 
