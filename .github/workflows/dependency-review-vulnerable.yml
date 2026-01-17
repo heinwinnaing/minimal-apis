@@ -17,7 +17,8 @@ jobs:
       - name: "Dependency Review"
         uses: actions/dependency-review-action@v4
         with:
-          base-ref: 'unit-test'
+          base-ref: 'main' # Or another branch name
+          head-ref: 'unit-test' # Or a specific commit SHA
           # Optional: Configure the action to your needs
           allow-licenses: MIT, Apache-2.0, BSD-3-Clause
           # deny-licenses: GPL-1.0, AGPL-3.0
