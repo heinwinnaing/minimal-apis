@@ -1,0 +1,26 @@
+name: "Check Vulnerable Packages"
+
+env:
+  PROJECT_PATH: 'MinimalApis/MinimalApis.csproj'
+  TEST_PROJECT_PATH: 'MinimalApis.Test/MinimalApis.Test.csproj'
+
+#on: pull_request
+on:
+  workflow_dispatch:
+
+jobs:         
+  vulnerable-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v5
+
+      - name: "Setup .NET"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x' # Specify your .NET version
+          cache: false
+
+      - name: "Scan for vulnerable NuGet packages"
+        run: dotnet list package --deprecated || exit 1 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
+        #run: dotnet list package --vulnerable --include-transitive || exit 0 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
