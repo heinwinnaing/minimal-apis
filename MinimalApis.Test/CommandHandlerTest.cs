@@ -7,6 +7,7 @@ using MinimalApis.Commands.RequestOtp;
 using MinimalApis.Database;
 using MinimalApis.Domain;
 using MinimalApis.Domain.Accounts;
+using MinimalApis.Services;
 using Moq;
 
 namespace MinimalApis.Test;
