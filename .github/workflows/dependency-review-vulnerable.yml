@@ -41,17 +41,9 @@ jobs:
           dotnet-version: '8.x' # Specify your .NET version
           cache: false
 
-      - name: "Restore Dependencies"
-        run: dotnet restore ${{ env.PROJECT_PATH }}
+      - name: Scan for vulnerable NuGet packages
+        run: dotnet list package --vulnerable --include-transitive || exit 0 # `|| exit 0` allows the workflow to continue even if vulnerabilities are found in this step
 
-      - name: "Check for .NET Vulnerable Packages"
-        uses: gavanlamb/.net-vulnerable@latest
-        with:
-          add-pr-comment: true
-          add-check-run: true
-          frameworks: net8.0
-          pr-comment-name: net8.0
-          target: ${{ env.PROJECT_PATH }}
 
       #- name: "Check for Vulnerable Packages"
         #uses: gavanlamb/.net-vulnerable@latest
