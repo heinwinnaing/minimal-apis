@@ -7,6 +7,7 @@ using MinimalApis.Commands.RequestOtp;
 using MinimalApis.Database;
 using MinimalApis.Domain;
 using MinimalApis.Domain.Accounts;
+using MinimalApis.Services;
 using Moq;
 
 namespace MinimalApis.Test;
@@ -39,8 +40,9 @@ public class CommandHandlerTest
         {
             Name = "Test",
             Email = "test@mailinator.com",
-            Phone = "123456789"
+            Phone = "123456788"
         };
+        var emailService = new Mock<IEmailService>();
         var validationResult = new ValidationResult(new List<ValidationFailure> { });
         var validator = new Mock<RegisterProfileCommandValidator>();
         validator
@@ -49,7 +51,7 @@ public class CommandHandlerTest
 
         using var scope = serviceProvider.CreateScope();
         IDbContext dbContext = scope.ServiceProvider.GetRequiredService<EFContext>();
-        var handler = new RegisterProfileCommandHandler(validator.Object, dbContext);
+        var handler = new RegisterProfileCommandHandler(validator.Object, emailService.Object, dbContext);
 
         //act
         var result = await handler.Handle(request, cts.Token);
@@ -85,6 +87,6 @@ public class CommandHandlerTest
         Assert.NotNull(result);
         Assert.Equal(0, result.Code);
         Assert.NotNull(result.Data);
-        Assert.NotEqual($"{Guid.Empty}", result.Data!.Token);
+        Assert.NotEqual($"{Guid.Empty}", result.Data.Token);
     }
 }

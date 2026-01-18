@@ -1,4 +1,4 @@
-name: Dotnet CI
+name: Build and Test Project
 
 env:
   PROJECT_PATH: 'MinimalApis/MinimalApis.csproj'
