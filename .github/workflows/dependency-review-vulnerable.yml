@@ -1,14 +1,31 @@
-name: "Check Vulnerable Packages"
-
+name: ".NET Dependency Review and Vulnerable Packages"
 env:
   PROJECT_PATH: 'MinimalApis/MinimalApis.csproj'
-  TEST_PROJECT_PATH: 'MinimalApis.Test/MinimalApis.Test.csproj'
-
-#on: pull_request
+  
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
-jobs:         
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v5
+
+      - name: "Dependency Review"
+        uses: actions/dependency-review-action@v4
+        with:
+          base-ref: 'main' # Or another branch name
+          head-ref: 'unit-test' # Or a specific commit SHA
+          # Optional: Configure the action to your needs
+          allow-licenses: MIT, Apache-2.0, BSD-3-Clause
+          # deny-licenses: GPL-1.0, AGPL-3.0
+          fail-on-severity: 'critical' # Possible values: "critical", "high", "moderate", "low"
+          fail-on-scopes: development, runtime # Possible values: "development", "runtime", "unknown"
+
   vulnerable-packages:
     runs-on: ubuntu-latest
     steps:
